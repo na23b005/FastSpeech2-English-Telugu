@@ -62,6 +62,7 @@ train:
     ckpt_path: "English/logs/ckpt"                    # checkpoints (model + optimizer) every save_step
     log_path: "English/logs"                          # loss logs + TensorBoard
     result_path: "English/logs/result"
+    final_model: "English/checkpoints/english_fastspeech2.pth.tar"   # small model-only file for GitHub and inference
   optimizer:
     batch_size: 16
     betas: [0.9, 0.98]
@@ -74,6 +75,7 @@ train:
     anneal_rate: 0.3
   step:
     total_step: 60000
+    max_hours: 3                                      # stop early (and save) so the Kaggle session never runs out
     log_step: 100                                     # write training loss every 100 steps
     synth_step: 5000                                  # make a sample audio every 5000 steps
     val_step: 1000                                    # validation loss every 1000 steps
