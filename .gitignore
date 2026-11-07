@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.ipynb_checkpoints/
+
+# Editor settings (Antigravity / VS Code)
+.vscode/
+
+# Data and training outputs: large, and re-created by our scripts
+English/data/raw/
+English/data/preprocessed/
+English/logs/
+Telugu/data/raw/
+Telugu/data/preprocessed/
+Telugu/logs/
+WORKLOG.md
