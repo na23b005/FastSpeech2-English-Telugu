@@ -1,0 +1,80 @@
+# English (Svarah) settings for FastSpeech 2.
+# One file = ming024's config/LibriTTS/preprocess.yaml + model.yaml + train.yaml (its multi-speaker English recipe).
+# Paths are relative to the project root: run every command from E:\FastSpeech2_Assignment (or /kaggle/working/project).
+
+preprocess:
+  dataset: "Svarah"
+  path:
+    lexicon_path: "English/data/lexicon.txt"          # word -> phonemes dictionary for the aligner (made in step 4)
+    raw_path: "English/data/raw"                      # one folder per speaker with .wav + .lab (text) files (step 4)
+    preprocessed_path: "English/data/preprocessed"    # TextGrid/, mel/, pitch/, energy/, duration/, train.txt, val.txt (step 5)
+  preprocessing:
+    val_size: 0                                       # ming024 would pick random val clips; we make our own split in step 4
+    text:
+      text_cleaners: ["english_cleaners"]
+      language: "en"
+    audio:                                            # audio, stft and mel values must match the pretrained HiFi-GAN vocoder
+      sampling_rate: 22050
+      max_wav_value: 32768.0
+    stft:
+      filter_length: 1024
+      hop_length: 256                                 # one mel frame every 256 samples = 11.6 ms
+      win_length: 1024
+    mel:
+      n_mel_channels: 80
+      mel_fmin: 0
+      mel_fmax: 8000
+    pitch:
+      feature: "phoneme_level"                        # one pitch value per phoneme (average over its frames)
+      normalization: True
+    energy:
+      feature: "phoneme_level"
+      normalization: True
+
+model:
+  transformer:
+    encoder_layer: 4
+    encoder_head: 2
+    encoder_hidden: 256
+    decoder_layer: 6
+    decoder_head: 2
+    decoder_hidden: 256
+    conv_filter_size: 1024
+    conv_kernel_size: [9, 1]
+    encoder_dropout: 0.2
+    decoder_dropout: 0.2
+  variance_predictor:                                 # the duration, pitch and energy predictors
+    filter_size: 256
+    kernel_size: 3
+    dropout: 0.5
+  variance_embedding:
+    pitch_quantization: "linear"
+    energy_quantization: "linear"
+    n_bins: 256
+  multi_speaker: True                                 # Svarah: 117 speakers with ~5 min each, so one model with a speaker embedding
+  max_seq_len: 1000                                   # longest clip = 1000 frames = 11.6 s
+  vocoder:
+    model: "HiFi-GAN"
+    speaker: "universal"                              # vocoder trained on many voices
+
+train:
+  path:
+    ckpt_path: "English/logs/ckpt"                    # checkpoints (model + optimizer) every save_step
+    log_path: "English/logs"                          # loss logs + TensorBoard
+    result_path: "English/logs/result"
+  optimizer:
+    batch_size: 16
+    betas: [0.9, 0.98]
+    eps: 0.000000001
+    weight_decay: 0.0
+    grad_clip_thresh: 1.0
+    grad_acc_step: 1
+    warm_up_step: 4000                                # learning rate rises for the first 4000 steps
+    anneal_steps: [30000, 40000, 50000]               # learning rate x 0.3 at each of these steps
+    anneal_rate: 0.3
+  step:
+    total_step: 60000
+    log_step: 100                                     # write training loss every 100 steps
+    synth_step: 5000                                  # make a sample audio every 5000 steps
+    val_step: 1000                                    # validation loss every 1000 steps
+    save_step: 5000                                   # save a checkpoint every 5000 steps

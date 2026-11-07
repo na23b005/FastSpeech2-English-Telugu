@@ -81,6 +81,8 @@ class Preprocessor:
                     else:
                         info, pitch, energy, n = ret
                     out.append(info)
+                else:
+                    continue  # no TextGrid (MFA could not align this clip): skip it
 
                 if len(pitch) > 0:
                     pitch_scaler.partial_fit(pitch.reshape((-1, 1)))
@@ -160,7 +162,7 @@ class Preprocessor:
         )
 
         # Get alignments
-        textgrid = tgt.io.read_textgrid(tg_path)
+        textgrid = tgt.io.read_textgrid(tg_path, include_empty_intervals=True)
         phone, duration, start, end = self.get_alignment(
             textgrid.get_tier_by_name("phones")
         )
@@ -260,6 +262,7 @@ class Preprocessor:
         end_idx = 0
         for t in tier._objects:
             s, e, p = t.start_time, t.end_time, t.text
+            p = p or "sp"  # MFA 3 leaves silences empty: call them "sp"
 
             # Trim leading silences
             if phones == []:
