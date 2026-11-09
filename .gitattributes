@@ -1,0 +1,2 @@
+# keep the report byte-for-byte (git would otherwise treat this ASCII-encoded PDF as text and change line endings)
+*.pdf binary
