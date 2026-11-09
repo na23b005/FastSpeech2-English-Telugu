@@ -1,0 +1,23 @@
+# Python packages for preprocessing, training and inference (Python 3.12 / 3.13).
+# Versions are the ones inference was tested with on the laptop; Kaggle used its own recent versions
+# of torch, numpy, scipy, pandas, librosa, matplotlib, tensorboard and huggingface_hub.
+torch>=2.0            # tested 2.14.1
+numpy                 # tested 2.5.4
+scipy                 # tested 1.16.3
+pandas                # tested 2.3.3
+pyarrow               # tested 22.0.0 (reads the Svarah parquet files)
+pyyaml                # tested 6.0.2
+tqdm                  # tested 4.67.1
+matplotlib            # tested 3.10.7
+tensorboard           # tested 2.21.0
+librosa>=0.10         # tested 1.0.0
+soundfile             # tested 0.14.0
+huggingface_hub       # tested 2.4.0 (downloads Svarah)
+pyworld               # tested 0.3.5 (pitch extraction)
+tgt                   # tested 1.5 (reads MFA TextGrids)
+g2p_en                # tested 2.1.0 (text -> phonemes)
+nltk                  # tested 3.10.4
+inflect               # tested 7.6.0
+unidecode             # tested 1.4.0
+
+# Not a pip package: the Montreal Forced Aligner (MFA 3) is installed from conda-forge, see README.md.

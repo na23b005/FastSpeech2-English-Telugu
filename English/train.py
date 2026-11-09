@@ -124,7 +124,7 @@ def plot_losses(train_config):
         steps = [int(r[0]) for r in rows]
         fig, axes = plt.subplots(2, 3, figsize=(13, 6))
         for i, ax in enumerate(axes.flat):
-            ax.plot(steps, [float(r[-6 + i]) for r in rows])
+            ax.plot(steps, [float(r[-6 + i]) for r in rows], color="black", linewidth=0.9)
             ax.set_title(f"{LOSS_NAMES[i]} loss")
             ax.set_xlabel("step")
         fig.suptitle(f"English FastSpeech 2 - {'training' if split == 'train' else 'validation'} loss")

@@ -9,7 +9,9 @@ venv/
 
 # Data and training outputs: large, and re-created by our scripts
 English/data/raw/
-English/data/preprocessed/
+English/data/preprocessed/*
+!English/data/preprocessed/stats.json
+!English/data/preprocessed/speakers.json
 English/logs/
 Telugu/data/raw/
 Telugu/data/preprocessed/
